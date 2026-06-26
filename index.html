@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="习概高效刷题：单元练习、错题复盘、收藏题与本地记录。" />
+  <title>习概刷题网站</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="brand">
+      <span class="logo" aria-hidden="true">习</span>
+      <div>
+        <h1>习概刷题网站</h1>
+        <p>高效练习 · 即时反馈 · 错题复盘</p>
+      </div>
+    </div>
+    <nav class="tabs" aria-label="主导航">
+      <button class="tab active" data-view="home">首页</button>
+      <button class="tab" data-view="practice">开始刷题</button>
+      <button class="tab" data-view="bank">题库检索</button>
+      <button class="tab" data-view="saved">错题 / 收藏</button>
+    </nav>
+  </header>
+
+  <main>
+    <section id="view-home" class="view active">
+      <div class="hero card">
+        <div>
+          <p class="eyebrow">Smart Practice</p>
+          <h2>刷题、反馈、复盘，一口气完成</h2>
+          <p class="muted">按单元、题型与题目来源灵活练习；答题后即时判分，结束后自动生成本次错题总结，并可马上进入错题复练。</p>
+          <div class="hero-actions">
+            <button class="primary" id="quickStart">随机刷 20 题</button>
+            <button class="secondary" id="goPractice">自定义练习</button>
+          </div>
+        </div>
+        <div class="stats-grid" id="statsGrid"></div>
+      </div>
+
+      <div class="layout-two">
+        <section class="card glass-card">
+          <div class="section-head">
+            <h3>单元进度</h3>
+            <button class="text-btn" id="resetProgress">清空本机记录</button>
+          </div>
+          <div id="unitProgress" class="unit-progress"></div>
+        </section>
+        <section class="card glass-card">
+          <h3>快捷操作</h3>
+          <ol class="tips">
+            <li>单选、判断题可双击选项，立即作答并进入下一题。</li>
+            <li>多选题先勾选答案，也可以双击选项快速提交当前选择。</li>
+            <li>按 Enter 可提交；提交后再按 Enter 可进入下一题或查看总结。</li>
+            <li>互动效果可在练习设置中随时关闭。</li>
+          </ol>
+        </section>
+      </div>
+    </section>
+
+    <section id="view-practice" class="view">
+      <div class="practice-shell">
+        <aside class="controls card">
+          <h2>练习设置</h2>
+          <label>练习范围
+            <select id="unitFilter"></select>
+          </label>
+          <label>题型
+            <select id="typeFilter">
+              <option value="all">全部题型</option>
+              <option value="single">单选题</option>
+              <option value="multiple">多选题</option>
+              <option value="judge">判断题</option>
+            </select>
+          </label>
+          <label>题目来源
+            <select id="poolFilter">
+              <option value="all">全部题目</option>
+              <option value="wrong">只刷错题</option>
+              <option value="starred">只刷收藏</option>
+              <option value="unseen">优先未做</option>
+            </select>
+          </label>
+          <label>出题顺序
+            <select id="orderFilter">
+              <option value="shuffle">随机</option>
+              <option value="origin">原始顺序</option>
+            </select>
+          </label>
+          <label>题目数量
+            <input id="countInput" type="number" min="1" max="200" value="20" />
+            <small class="form-hint" id="countHint">默认当前范围全部题</small>
+          </label>
+          <label class="toggle-line">
+            <input id="effectsToggle" type="checkbox" checked />
+            <span>开启答题彩带 / 震动效果</span>
+          </label>
+          <button class="primary full" id="startPractice">生成练习</button>
+          <div class="mini-stats" id="practiceMiniStats"></div>
+        </aside>
+
+        <section class="question-area card" aria-live="polite">
+          <div id="questionBox" class="question-empty">
+            <h2>还没有生成练习</h2>
+            <p class="muted">选择左侧条件后点击“生成练习”。自定义练习的题目数量会默认填入当前范围可用的最大题数。</p>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <section id="view-bank" class="view">
+      <div class="card">
+        <div class="section-head wrap">
+          <div>
+            <h2>题库检索</h2>
+            <p class="muted">可按关键词、单元、题型筛选，并展开查看答案。</p>
+          </div>
+          <div class="search-row">
+            <input id="searchInput" type="search" placeholder="搜索题干或选项，例如：依法治国" />
+            <select id="bankUnitFilter"></select>
+            <select id="bankTypeFilter">
+              <option value="all">全部题型</option>
+              <option value="single">单选题</option>
+              <option value="multiple">多选题</option>
+              <option value="judge">判断题</option>
+            </select>
+          </div>
+        </div>
+        <div id="bankList" class="bank-list"></div>
+      </div>
+    </section>
+
+    <section id="view-saved" class="view">
+      <div class="layout-two">
+        <section class="card">
+          <div class="section-head">
+            <h2>错题本</h2>
+            <button class="text-btn" id="clearWrong">清空错题</button>
+          </div>
+          <div id="wrongList" class="bank-list compact"></div>
+        </section>
+        <section class="card">
+          <div class="section-head">
+            <h2>收藏题</h2>
+            <button class="text-btn" id="clearStarred">清空收藏</button>
+          </div>
+          <div id="starredList" class="bank-list compact"></div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>© 个人学习使用</span>
+    <span>·</span>
+    <span>共 <strong id="footerTotal">0</strong> 题</span>
+  </footer>
+
+  <script src="questions.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
